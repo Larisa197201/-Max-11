@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Буквы И, Е, Я в суффиксах | Тренажёр от Макса</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --accent2: #2563eb;
+      --ok: #16a34a;
+      --bad: #dc2626;
+      --warn: #d97706;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe, transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(30, 58, 138, 0.25);
+      margin-bottom: 20px;
+    }
+
+    h1 { margin: 0 0 8px; font-size: clamp(22px, 4vw, 32px); }
+    .subtitle { margin: 0; opacity: 0.94; font-size: 15px; }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      transition: 0.2s;
+      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn:hover { background: var(--accent2); transform: translateY(-1px); }
+    
+    .btn.ghost {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #cbd5e1;
+      box-shadow: none;
+    }
+    .btn.ghost:hover { background: #f1f5f9; }
+
+    .total {
+      margin-left: auto;
+      font-weight: 700;
+      color: #334155;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      border: 1px solid #f1f5f9;
+    }
+
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      color: #1e293b;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+
+    .word-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .word-row:last-child { border-bottom: none; }
+
+    .word-text {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .blank {
+      display: inline-block;
+      min-width: 24px;
+      text-align: center;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      margin: 0 2px;
+      transition: 0.3s;
+    }
+
+    .letter-options {
+      display: flex;
+      gap: 8px;
+    }
+
+    .letter-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+      color: #334155;
+    }
+
+    .letter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .letter-btn.selected {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .word-row.correct .blank { color: var(--ok); border-color: var(--ok); }
+    .word-row.correct .letter-btn.selected { background: var(--ok); border-color: var(--ok); }
+    
+    .word-row.wrong .blank { color: var(--bad); border-color: var(--bad); }
+    .word-row.wrong .letter-btn.selected { background: var(--bad); border-color: var(--bad); }
+
+    .explain {
+      width: 100%;
+      font-size: 13.5px;
+      color: #475569;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: none;
+      border-left: 3px solid #94a3b8;
+    }
+    .word-row.correct .explain, .word-row.wrong .explain { display: block; }
+
+    @media (max-width: 600px) {
+      .word-row { flex-direction: column; align-items: flex-start; }
+      .letter-options { width: 100%; justify-content: space-between; }
+      .letter-btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Буквы И, Е, Я в суффиксах</h1>
+      <p class="subtitle">
+        Выберите правильную букву для каждого слова. Нажмите на кнопку с нужной буквой, а затем проверьте результат.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <button class="btn" id="checkAll">Проверить всё</button>
+      <button class="btn ghost" id="resetAll">Сбросить всё</button>
+      <div class="total" id="total">Выполнено: 0 из 15 • Верно: 0</div>
+    </div>
+
+    <main id="tasks"></main>
+  </div>
+
+  <script>
+    const blocksData = [
+      {
+        id: 1,
+        title: "Блок 1",
+        words: [
+          { id: 1, text: "ландыш_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (ландышевый)." },
+          { id: 2, text: "вкрадч_вый", correct: "и", expl: "Суффикс -ЧИВ- всегда пишется с И (вкрадчивый)." },
+          { id: 3, text: "милост_вый", correct: "и", expl: "Суффикс -ИВ- под ударением (милостивый)." },
+          { id: 4, text: "каракул_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (каракулевый)." },
+          { id: 5, text: "выносл_вый", correct: "и", expl: "Суффикс -ЛИВ- всегда пишется с И (выносливый)." }
+        ]
+      },
+      {
+        id: 2,
+        title: "Блок 2",
+        words: [
+          { id: 1, text: "гуттаперч_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (гуттаперчевый)." },
+          { id: 2, text: "юрод_вый", correct: "и", expl: "Слово-исключение, пишется с И (юродивый)." },
+          { id: 3, text: "эмал_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (эмалевый)." },
+          { id: 4, text: "ансамбл_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (ансамблевый)." },
+          { id: 5, text: "никел_вый", correct: "е", expl: "Суффикс -ЕВ- без ударения (никелевый)." }
+        ]
+      },
+      {
+        id: 3,
+        title: "Блок 3",
+        words: [
+          { id: 1, text: "масл_нистое пятно", correct: "я", expl: "Маслянистый — от «масляный», суффикс -ЯН- (из масла)." },
+          { id: 2, text: "масл_ная лампа", correct: "я", expl: "Масляная — от «масло», суффикс -ЯН- (работает на масле)." },
+          { id: 3, text: "масл_ный голос", correct: "е", expl: "Масленый — переносное значение (сладкий, елейный), суффикс -ЕН-." },
+          { id: 4, text: "масл_ные руки", correct: "е", expl: "Масленые — испачканные маслом, суффикс -ЕН-." },
+          { id: 5, text: "масл_ные краски", correct: "я", expl: "Масляные — разведённые на масле, суффикс -ЯН-." }
+        ]
+      }
+    ];
+
+    const container = document.getElementById("tasks");
+    let totalWords = 0;
+
+    blocksData.forEach(block => {
+      const card = document.createElement("section");
+      card.className = "card";
+      card.dataset.blockId = block.id;
+
+      let wordsHTML = "";
+      block.words.forEach(word => {
+        totalWords++;
+        // Разбиваем слово по символу "_"
+        const parts = word.text.split("_");
+        
+        wordsHTML += `
+          <div class="word-row" data-word-id="${word.id}" data-correct="${word.correct}">
+            <div class="word-text">
+              ${parts[0]}<span class="blank">?</span>${parts[1]}
+            </div>
+            <div class="letter-options">
+              <button class="letter-btn" data-letter="и">И</button>
+              <button class="letter-btn" data-letter="е">Е</button>
+              <button class="letter-btn" data-letter="я">Я</button>
+            </div>
+            <div class="explain">${word.expl}</div>
+          </div>
+        `;
+      });
+
+      card.innerHTML = `
+        <h2>${block.title}</h2>
+        <div class="words-container">${wordsHTML}</div>
+      `;
+      
+      container.appendChild(card);
+    });
+
+    // Обработка нажатий на кнопки букв
+    document.querySelectorAll(".letter-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        const row = this.closest(".word-row");
+        if (row.classList.contains("correct")) return; // Если уже верно, не даем менять
+
+        // Убираем выделение у всех кнопок в этой строке
+        row.querySelectorAll(".letter-btn").forEach(b => b.classList.remove("selected"));
+        // Выделяем нажатую
+        this.classList.add("selected");
+        
+        // Если до этого была ошибка, сбрасываем её
+        row.classList.remove("wrong");
+        row.querySelector(".blank").textContent = "?";
+      });
+    });
+
+    function checkRow(row) {
+      const selectedBtn = row.querySelector(".letter-btn.selected");
+      const correctLetter = row.dataset.correct;
+      const blank = row.querySelector(".blank");
+
+      if (!selectedBtn) {
+        blank.textContent = "?";
+        row.classList.remove("correct", "wrong");
+        return null; // Не выбрано
+      }
+
+      const selectedLetter = selectedBtn.dataset.letter;
+      
+      if (selectedLetter === correctLetter) {
+        row.classList.add("correct");
+        row.classList.remove("wrong");
+        blank.textContent = selectedLetter;
+        return true;
+      } else {
+        row.classList.add("wrong");
+        row.classList.remove("correct");
+        blank.textContent = correctLetter; // Показываем правильную
+        return false;
+      }
+    }
+
+    document.getElementById("checkAll").addEventListener("click", () => {
+      const rows = document.querySelectorAll(".word-row");
+      rows.forEach(row => checkRow(row));
+      updateTotal();
+    });
+
+    document.getElementById("resetAll").addEventListener("click", () => {
+      document.querySelectorAll(".word-row").forEach(row => {
+        row.classList.remove("correct", "wrong");
+        row.querySelector(".blank").textContent = "?";
+        row.querySelectorAll(".letter-btn").forEach(b => b.classList.remove("selected"));
+      });
+      updateTotal();
+    });
+
+    function updateTotal() {
+      const rows = document.querySelectorAll(".word-row");
+      let done = 0;
+      let ok = 0;
+
+      rows.forEach(row => {
+        if (row.classList.contains("correct") || row.classList.contains("wrong")) {
+          done++;
+          if (row.classList.contains("correct")) ok++;
+        }
+      });
+
+      document.getElementById("total").textContent = `Выполнено: ${done} из ${totalWords} • Верно: ${ok}`;
+    }
+  </script>
+</body>
+</html>
